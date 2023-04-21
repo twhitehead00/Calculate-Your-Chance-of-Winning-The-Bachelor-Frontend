@@ -13,7 +13,7 @@ function App() {
         race: '',
         oneOnOne: '',
         joke_entrance: '',
-        job_category: 'CORPORATE',
+        job_category: '',
         FIR: '',
         note: 0
     });
@@ -24,7 +24,7 @@ function App() {
     };
 
     const [submitted, setSubmitted] = useState(false); // state variable for tracking form submission
-    const [prediction, setPrediction] = useState(null);
+    const [prediction, setPrediction] = useState(0);
 
     const serverUrl = "http://127.0.0.1:5000";
 
@@ -34,6 +34,7 @@ function App() {
         setSubmitted(true); // update state to indicate form has been submitted
         setPrediction(response.data)
     };
+
 
     return (
         <div className="row justify-content-center">
@@ -81,6 +82,18 @@ function App() {
                     </div>
                     <div className="form-group">
                         <label className="form-label">
+                            <select name="job_category" className="form-select" value={formData.job_category} onChange={handleInputChange}>
+                                <option value="">Select job</option>
+                                <option value="CORPORATE">Corporate baddie</option>
+                                <option value="POLITICS">Political genius</option>
+                                <option value="TRADES">Artistic queen</option>
+                                <option value="TRADITIONAL">Unemployed</option>
+                                <option value="OTHER">Other</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div className="form-group">
+                        <label className="form-label">
                             <select name="race" className="form-select" value={formData.race} onChange={handleInputChange}>
                                 <option value="">Select race</option>
                                 <option value="Asian">Asian</option>
@@ -109,10 +122,10 @@ function App() {
                     </div>
                     <div className="form-group">
                         <label className="form-label">
-                            During which week did you have your 1 on 1 date:
+                            During which week did you have your first 1 on 1 date:
                             <select name="oneOnOne" className="form-select" value={formData.oneOnOne} onChange={handleInputChange} >
                                 <option value="">Select week</option>
-                                {Array.from({length: 8}, (_, i) => i + 1).map((value) => (
+                                {Array.from({length: 7}, (_, i) => i + 1).map((value) => (
                                     <option key={value} value={value}>{"Week " + value}</option>
                                 ))}
                             </select>
@@ -130,16 +143,19 @@ function App() {
                     </div>
                 <button type="submit" className="btn btn-light">Calculate my chance of winning</button>
             </form>
-            {submitted && (
-                <div className="result">
-                    You made it until week { prediction }! ❤️‍🔥
-                </div>
-            )}
+                {submitted && (
+                    <div className="result">
+                        {prediction === 11 && <p>You won! 🎉🏆</p>}
+                        {prediction === 10 && <p>You came in 2nd! 💗🥈</p>}
+                        {prediction === 9 && <p>You came in 3rd! 💛🥉</p>}
+                        {prediction < 9 && <p>You made it to week {prediction} ❤️‍🔥!</p>}
+                    </div>
+                )}
         </div>
         <div className="container text-center">
             More information on this project can be found <a href="https://docs.google.com/document/d/1qHxv66inSR5QIADViRgiq5ltjEn5SgZP-XzQkLR7MVk/edit?usp=sharing">here</a>.
             < br/>
-            Code is available <a href="">here</a>.
+            Code is available <a href="https://github.com/twhitehead00/Calculate-Your-Chance-of-Winning-The-Bachelor-Frontend">here</a>.
         </div>
     </div>
     );
